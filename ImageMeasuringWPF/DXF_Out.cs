@@ -38,11 +38,16 @@ namespace ImageMeasuringWPF
             }
             if (elements.SaveCircles != null)
             {
-                foreach(var circle in elements.SaveCircles)
+                foreach(SaveCircle cir in elements.SaveCircles)
                 {
-
+                    dxfString += dxfCircle;
+                    dxfString += "10\r\n";
+                    dxfString += $"{cir.CenterX * elements.ScaleFactor}\r\n";
+                    dxfString += "20\r\n";
+                    dxfString += $"{-cir.CenterY * elements.ScaleFactor}\r\n";
+                    dxfString += "40\r\n";
+                    dxfString += $"{.5 *cir.Diameter * elements.ScaleFactor}\r\n";
                 }
-
             }
             dxfString += endSec;
             dxfString += eof;
