@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageMeasuringWPF", "ImageMeasuringWPF\ImageMeasuringWPF.csproj", "{57D60EDF-44D9-45D9-A9DD-722CE18D4D7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonComm", "PythonComm\PythonComm.csproj", "{5217C424-78CF-4D6C-85ED-C011B3D61545}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{57D60EDF-44D9-45D9-A9DD-722CE18D4D7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57D60EDF-44D9-45D9-A9DD-722CE18D4D7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57D60EDF-44D9-45D9-A9DD-722CE18D4D7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57D60EDF-44D9-45D9-A9DD-722CE18D4D7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5217C424-78CF-4D6C-85ED-C011B3D61545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5217C424-78CF-4D6C-85ED-C011B3D61545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5217C424-78CF-4D6C-85ED-C011B3D61545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5217C424-78CF-4D6C-85ED-C011B3D61545}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BF2DEF3E-9F62-47AC-8282-3017AC47E937}
+	EndGlobalSection
+EndGlobal
