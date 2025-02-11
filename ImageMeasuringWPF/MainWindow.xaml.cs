@@ -200,6 +200,7 @@ namespace ImageMeasuringWPF
 
         private void Canvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ShapeProperties.ClearList();
             foreach(object sp_object in Buttons.Children)
             {
                 if(sp_object is Button)
@@ -231,7 +232,7 @@ namespace ImageMeasuringWPF
                 Button_DrawLine.IsEnabled = false;
             }
         }
-        private SerializeElements ElementSerializer()
+        public SerializeElements ElementSerializer()
         {
             SerializeElements serializeElements = new SerializeElements();
             serializeElements.ScaleFactor = scaleFactor;
@@ -248,12 +249,7 @@ namespace ImageMeasuringWPF
                         {
                             serializeElements.SaveLines = new List<SaveLine>();
                         }
-                        SaveLine saveLine = new SaveLine();
-                        saveLine.X1 = ((Line)child).X1;
-                        saveLine.Y1 = ((Line)child).Y1;
-                        saveLine.X2 = ((Line)child).X2;
-                        saveLine.Y2 = ((Line)child).Y2;
-                        saveLine.Color = ((Line)child).Stroke.ToString();
+                        SaveLine saveLine = DrawingUtils.Line_GetPoints((Line)child);
                         serializeElements.SaveLines.Add(saveLine);
                         break;
                     case "System.Windows.Shapes.Ellipse":
@@ -261,11 +257,7 @@ namespace ImageMeasuringWPF
                         {
                             serializeElements.SaveCircles = new List<SaveCircle>();
                         }
-                        SaveCircle saveCircle = new SaveCircle();
-                        saveCircle.Color = ((Ellipse)child).Stroke.ToString();
-                        saveCircle.Diameter = ((Ellipse)child).Height;
-                        saveCircle.CenterX = Canvas.GetLeft(((Ellipse)child)) + saveCircle.Diameter / 2;
-                        saveCircle.CenterY = Canvas.GetTop(((Ellipse)child)) + saveCircle.Diameter / 2;
+                        SaveCircle saveCircle = DrawingUtils.Circle_GetPoints((Ellipse)child);
                         serializeElements.SaveCircles.Add(saveCircle);
                         break;
                 }
@@ -308,6 +300,14 @@ namespace ImageMeasuringWPF
         {
             ((Shape)sender).StrokeThickness += 2;
             SelectedShapes.Add((Shape)sender);
+            if (SelectedShapes.Count == 1)
+            {
+                ShapeProperties.ListView_AddShape((Shape)sender);
+            }
+            else
+            {
+                ShapeProperties.ClearList();
+            }
 
         }
         private void Button_Erase_Click(object sender, RoutedEventArgs e)

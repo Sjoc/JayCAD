@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Shapes;
 
 namespace ImageMeasuringWPF
 {
@@ -43,6 +45,29 @@ namespace ImageMeasuringWPF
         {
             throw new NotImplementedException();
         }
+    }
+    public static class DrawingUtils
+    {
+        public static SaveLine Line_GetPoints(Line line)
+        {
+            SaveLine saveLine = new SaveLine();
+            saveLine.X1 = line.X1;
+            saveLine.Y1 = line.Y1;
+            saveLine.X2 = line.X2;
+            saveLine.Y2 = line.Y2;
+            saveLine.Color = line.Stroke.ToString();
+            return saveLine;
+        }
+        public static SaveCircle Circle_GetPoints(Ellipse circle)
+        {
+            SaveCircle saveCircle = new SaveCircle();
+            saveCircle.Color = ((Ellipse)circle).Stroke.ToString();
+            saveCircle.Diameter = ((Ellipse)circle).Height;
+            saveCircle.CenterX = Canvas.GetLeft(((Ellipse)circle)) + saveCircle.Diameter / 2;
+            saveCircle.CenterY = Canvas.GetTop(((Ellipse)circle)) + saveCircle.Diameter / 2;
+            return saveCircle;
+        }
+
     }
 
 }

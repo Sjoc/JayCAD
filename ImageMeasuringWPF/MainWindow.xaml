@@ -38,6 +38,7 @@
             <Button Height="50" Click="Button_DrawLine_Click" Name="Button_DrawLine">Draw Line</Button>
             <Button Height="50" Click="Button_Erase_Click" Name="Button_Erase">Erase</Button>
             <Button Height="50" Click="Button_DrawCircle_Click" Name="Button_DrawCircle">Draw Circle</Button>
+            <local:ShapePropertyListView x:Name ="ShapeProperties"/>
         </StackPanel>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="25" Name="Mouse_Pos" Grid.ColumnSpan="2" Grid.Row="2" >X: PosX  Y: PosY</TextBlock>
     </Grid>
