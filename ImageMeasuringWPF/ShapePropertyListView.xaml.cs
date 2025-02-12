@@ -27,10 +27,10 @@ namespace ImageMeasuringWPF
         }
         public void ListView_AddShape(Shape shape)
         {
+            selectedShape = shape;
             switch (shape.GetType().ToString())
             {
                 case "System.Windows.Shapes.Line":
-                    selectedShape = shape;
                     SaveLine saveLine = DrawingUtils.Line_GetPoints((Line)shape);
                     Shape_Data X1 = new Shape_Data();
                     X1.Property = "X1";
@@ -51,6 +51,18 @@ namespace ImageMeasuringWPF
                     break;
                 case "System.Windows.Shapes.Ellipse":
                     SaveCircle saveCircle = DrawingUtils.Circle_GetPoints((Ellipse)shape);
+                    Shape_Data CenX = new Shape_Data();
+                    CenX.Property = "Center X";
+                    CenX.Value = saveCircle.CenterX.ToString();
+                    ListViewProperties.Items.Add(CenX);
+                    Shape_Data CenY = new Shape_Data();
+                    CenY.Property = "Center Y";
+                    CenY.Value = saveCircle.CenterY.ToString();
+                    ListViewProperties.Items.Add(CenY);
+                    Shape_Data Diameter = new Shape_Data();
+                    Diameter.Property = "Diameter";
+                    Diameter.Value = (saveCircle.Diameter.ToString());
+                    ListViewProperties.Items.Add(Diameter);
                     break;
             }
 
@@ -94,6 +106,19 @@ namespace ImageMeasuringWPF
                         }
                         break;
                     case "System.Windows.Shapes.Ellipse":
+                        SaveCircle saveCircle = DrawingUtils.Circle_GetPoints((Ellipse)selectedShape);
+                        switch (data.Property)
+                        {
+                            case "Center X":
+                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, newValue, saveCircle.CenterY, .5*saveCircle.Diameter);
+                                break;
+                            case "Center Y":
+                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, saveCircle.CenterX, newValue, .5 * saveCircle.Diameter);
+                                break;
+                            case "Diameter":
+                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, saveCircle.CenterX, saveCircle.CenterY, .5 * newValue);
+                                break;
+                        }
                         break;
                 }
             }

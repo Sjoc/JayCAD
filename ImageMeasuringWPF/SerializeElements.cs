@@ -67,6 +67,13 @@ namespace ImageMeasuringWPF
             saveCircle.CenterY = Canvas.GetTop(((Ellipse)circle)) + saveCircle.Diameter / 2;
             return saveCircle;
         }
+        public static void SetCircleParameters(Ellipse circle, double centerX, double centerY, double radius)
+        {
+            Canvas.SetLeft(circle, centerX - (radius));
+            Canvas.SetTop(circle, centerY - (radius));
+            circle.Width = radius * 2;
+            circle.Height = radius * 2;
+        }
 
     }
 

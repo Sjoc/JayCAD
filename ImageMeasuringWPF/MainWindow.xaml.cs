@@ -138,10 +138,7 @@ namespace ImageMeasuringWPF
                     {
                         double radius = 0;
                         radius = Math.Sqrt(Math.Pow(Math.Abs(mousePoint.X - startPoint.X), 2) + Math.Pow(Math.Abs(mousePoint.Y - startPoint.Y), 2));
-                        Canvas.SetLeft(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.X-(radius));
-                        Canvas.SetTop(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.Y - (radius));
-                        ((Ellipse)canvas.Children[canvas.Children.Count-1]).Width = radius*2;
-                        ((Ellipse)canvas.Children[canvas.Children.Count - 1]).Height = radius*2;
+                        DrawingUtils.SetCircleParameters(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.X, startPoint.Y, radius);
                     }
                     break;
             }
