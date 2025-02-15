@@ -110,13 +110,13 @@ namespace ImageMeasuringWPF
                         switch (data.Property)
                         {
                             case "Center X":
-                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, newValue, saveCircle.CenterY, .5*saveCircle.Diameter);
+                                DrawingUtils.Circle_SetPoints((Ellipse)selectedShape, newValue, saveCircle.CenterY, .5*saveCircle.Diameter);
                                 break;
                             case "Center Y":
-                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, saveCircle.CenterX, newValue, .5 * saveCircle.Diameter);
+                                DrawingUtils.Circle_SetPoints((Ellipse)selectedShape, saveCircle.CenterX, newValue, .5 * saveCircle.Diameter);
                                 break;
                             case "Diameter":
-                                DrawingUtils.SetCircleParameters((Ellipse)selectedShape, saveCircle.CenterX, saveCircle.CenterY, .5 * newValue);
+                                DrawingUtils.Circle_SetPoints((Ellipse)selectedShape, saveCircle.CenterX, saveCircle.CenterY, .5 * newValue);
                                 break;
                         }
                         break;

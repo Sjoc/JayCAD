@@ -100,7 +100,7 @@ namespace ImageMeasuringWPF
         public void Open_Image(object sender, ExecutedRoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF";
+            openFile.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG";
             openFile.Title = "Choose Image";
             bool? result = openFile.ShowDialog();
             if (result == true)
@@ -115,6 +115,8 @@ namespace ImageMeasuringWPF
             Graphic.Source = new BitmapImage(new Uri(ImagePath));
             canvas.Width = Graphic.Source.Width;
             canvas.Height = Graphic.Source.Height;
+            DefaultBackground.Width = Graphic.Source.Width;
+            DefaultBackground.Height = Graphic.Source.Height;
         }
 
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -138,7 +140,7 @@ namespace ImageMeasuringWPF
                     {
                         double radius = 0;
                         radius = Math.Sqrt(Math.Pow(Math.Abs(mousePoint.X - startPoint.X), 2) + Math.Pow(Math.Abs(mousePoint.Y - startPoint.Y), 2));
-                        DrawingUtils.SetCircleParameters(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.X, startPoint.Y, radius);
+                        DrawingUtils.Circle_SetPoints(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.X, startPoint.Y, radius);
                     }
                     break;
             }

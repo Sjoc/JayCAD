@@ -27,7 +27,8 @@
             </Menu>
         </StackPanel>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility ="Auto" Grid.ColumnSpan="1" Grid.Row="1" Margin="0,25,0,25">
-            <Canvas Height="625" Width="Auto" Margin="25,25,0,0" Cursor="Cross" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseRightButtonDown="Canvas_MouseRightButtonDown" Name="canvas">
+            <Canvas Height="625" Width="900" Margin="25,25,0,0" Cursor="Cross" MouseMove="Canvas_MouseMove" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseRightButtonDown="Canvas_MouseRightButtonDown" Name="canvas">
+                <Rectangle Height="625" Width ="900" Stroke="Black" Fill="AntiqueWhite" Name="DefaultBackground"></Rectangle>
                 <Image Height="Auto" Width="Auto" Name ="Graphic" Cursor="Cross">
                 </Image>
             </Canvas>
