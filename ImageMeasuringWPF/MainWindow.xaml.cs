@@ -143,46 +143,63 @@ namespace ImageMeasuringWPF
                         DrawingUtils.Circle_SetPoints(((Ellipse)canvas.Children[canvas.Children.Count - 1]), startPoint.X, startPoint.Y, radius);
                     }
                     break;
+                case DrawCommands.Arc:
+                    if (startDrawCommand)
+                    {
+                        double slope = 0;
+                        double perpendicular = 0;
+                        double py_intercept = 0;
+                        Horizontality horizontality = DrawingUtils.CheckHorizontal(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+                        Point line_mid = DrawingUtils.Line_GetMidPoint(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+                        switch(horizontality)
+                        {
+                            case Horizontality.Horizontal:
+                                slope = 0;
+                                break;
+                            case Horizontality.Slope:
+                                slope = DrawingUtils.Line_GetSlope(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
+                                perpendicular = - Math.Pow(slope, -1);
+                                py_intercept = perpendicular*line_mid.X-line_mid.Y;
+                                break;
+                        }
+                        double radius = 0;
+                        
+                        DrawingUtils.Arc_SetPoints(((System.Windows.Shapes.Path)canvas.Children[canvas.Children.Count-1]), startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, radius, mousePoint.X, mousePoint.Y);
+                    }
+                    break;
             }
 
         }
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            switch(m_DrawCommands)
+            if(!startDrawCommand)
             {
-                case DrawCommands.None:
-                    startPoint = e.GetPosition(this.canvas);
-                    break;
-                case DrawCommands.Line:
-                    if (!startDrawCommand)
-                    {
-                        startDrawCommand = true;
+                startDrawCommand = true;
+                startPoint = e.GetPosition(this.canvas);
+                endPoint.X = startPoint.X + 1;
+                endPoint.Y = startPoint.Y + 1;
+                switch (m_DrawCommands)
+                {
+                    case DrawCommands.None:
+                        startDrawCommand = false;
                         startPoint = e.GetPosition(this.canvas);
-                        endPoint.X = startPoint.X +1;
-                        endPoint.Y = startPoint.Y +1;
+                        break;
+                    case DrawCommands.Line:
                         DrawLine();
-                    }
-                    else
-                    {
-                        startDrawCommand = false;
-                    }
-                    break;
-                case DrawCommands.Circle:
-                    if (!startDrawCommand)
-                    {
-                        startDrawCommand = true;
-                        startPoint = e.GetPosition(this.canvas);
-                        endPoint.X = startPoint.X + 1;
-                        endPoint.Y = startPoint.Y + 1;
+                        break;
+                    case DrawCommands.Circle:
                         DrawCircle();
-                    }
-                    else
-                    {
-                        startDrawCommand = false;
-                    }
-                    break;
-
+                        break;
+                    case DrawCommands.Arc:
+                        DrawArc();
+                        break;
+                }
             }
+            else
+            {
+                startDrawCommand = false;
+            }
+
         }
         private void DrawLine()
         {
@@ -348,6 +365,22 @@ namespace ImageMeasuringWPF
             ellipse.MouseDown += OnElementMouseDown;
             canvas.Children.Add(ellipse);
 
+        }
+        private void Button_DrawArc_Click(object sender, RoutedEventArgs e)
+        {
+            if(m_DrawCommands != DrawCommands.Arc)
+            {
+                m_DrawCommands= DrawCommands.Arc;
+                Button_DrawArc.IsEnabled = false;
+            }
+        }
+        private void DrawArc()
+        {
+            System.Windows.Shapes.Path arc = new System.Windows.Shapes.Path();
+            DrawingUtils.Arc_SetPoints(arc, startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, 1, 0, 0);
+            arc.MouseEnter += OnMouseEnterElement;
+            arc.MouseDown += OnElementMouseDown;
+            canvas.Children.Add(arc);
         }
     }
 }
