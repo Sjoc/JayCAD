@@ -28,9 +28,9 @@ namespace ImageMeasuringWPF
         private Point mousePoint;
         private Point startPoint;
         private Point endPoint;
-        private bool startDrawCommand = false;
         private List<Shape> SelectedShapes = null;
         private double scaleFactor = 1.0;
+        private int drawStep = 0;
         private enum DrawCommands
         {
             None,
@@ -129,14 +129,14 @@ namespace ImageMeasuringWPF
                 case DrawCommands.None:
                     break;
                 case DrawCommands.Line:
-                    if (startDrawCommand)
+                    if (drawStep == 2)
                     {
                         ((Line)canvas.Children[canvas.Children.Count - 1]).X2 = mousePoint.X;
                         ((Line)canvas.Children[canvas.Children.Count - 1]).Y2 = mousePoint.Y;
                     }
                     break;
                 case DrawCommands.Circle:
-                    if (startDrawCommand)
+                    if (drawStep == 2)
                     {
                         double radius = 0;
                         radius = Math.Sqrt(Math.Pow(Math.Abs(mousePoint.X - startPoint.X), 2) + Math.Pow(Math.Abs(mousePoint.Y - startPoint.Y), 2));
@@ -144,11 +144,22 @@ namespace ImageMeasuringWPF
                     }
                     break;
                 case DrawCommands.Arc:
-                    if (startDrawCommand)
+                    if(drawStep == 1)
+                    {
+
+                    }
+                    else if (drawStep == 2)
                     {
                         double slope = 0;
                         double perpendicular = 0;
                         double py_intercept = 0;
+                        double mid_intercept = 0;
+                        double center_Intercept = 0;
+                        double x_cen = 0;
+                        double y_cen = 0;
+                        double radius = 0;
+                        double x_dist = 0; //x distance from x_cen to startPoint.X
+                        double y_dist = 0; //y distacne from y_cen to StartPoint.Y
                         Horizontality horizontality = DrawingUtils.CheckHorizontal(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
                         Point line_mid = DrawingUtils.Line_GetMidPoint(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
                         switch(horizontality)
@@ -160,11 +171,16 @@ namespace ImageMeasuringWPF
                                 slope = DrawingUtils.Line_GetSlope(startPoint.X, startPoint.Y, endPoint.X, endPoint.Y);
                                 perpendicular = - Math.Pow(slope, -1);
                                 py_intercept = perpendicular*line_mid.X-line_mid.Y;
+                                mid_intercept = line_mid.Y+perpendicular*line_mid.X;
+                                center_Intercept = mousePoint.X-slope*mousePoint.X;
+                                x_cen = (center_Intercept - mid_intercept)/(perpendicular-slope);
+                                y_cen = perpendicular * x_cen + center_Intercept;
+                                x_dist = Math.Abs(x_cen - startPoint.X);
+                                y_dist = Math.Abs(y_cen - startPoint.Y);
+                                radius = Math.Sqrt(Math.Pow(x_dist, 2)+Math.Pow(y_dist, 2));
                                 break;
-                        }
-                        double radius = 0;
-                        
-                        DrawingUtils.Arc_SetPoints(((System.Windows.Shapes.Path)canvas.Children[canvas.Children.Count-1]), startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, radius, mousePoint.X, mousePoint.Y);
+                        }                        
+                        DrawingUtils.Arc_SetPoints(((System.Windows.Shapes.Path)canvas.Children[canvas.Children.Count-1]), startPoint.X, startPoint.Y, endPoint.X, endPoint.Y, radius, x_cen, y_cen);
                     }
                     break;
             }
@@ -172,32 +188,37 @@ namespace ImageMeasuringWPF
         }
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(!startDrawCommand)
+            switch(drawStep)
             {
-                startDrawCommand = true;
-                startPoint = e.GetPosition(this.canvas);
-                endPoint.X = startPoint.X + 1;
-                endPoint.Y = startPoint.Y + 1;
-                switch (m_DrawCommands)
-                {
-                    case DrawCommands.None:
-                        startDrawCommand = false;
-                        startPoint = e.GetPosition(this.canvas);
-                        break;
-                    case DrawCommands.Line:
-                        DrawLine();
-                        break;
-                    case DrawCommands.Circle:
-                        DrawCircle();
-                        break;
-                    case DrawCommands.Arc:
-                        DrawArc();
-                        break;
-                }
-            }
-            else
-            {
-                startDrawCommand = false;
+                case 0:
+                    startPoint = e.GetPosition(this.canvas);
+                    endPoint.X = startPoint.X + 1;
+                    endPoint.Y = startPoint.Y + 1;
+                    switch (m_DrawCommands)
+                    {
+                        case DrawCommands.None:
+                            drawStep = 0;
+                            startPoint = e.GetPosition(this.canvas);
+                            break;
+                        case DrawCommands.Line:
+                            DrawLine();
+                            drawStep++;
+                            break;
+                        case DrawCommands.Circle:
+                            DrawCircle();
+                            drawStep++;
+                            break;
+                        case DrawCommands.Arc:
+                            DrawArc();
+                            break;
+                    }
+                    drawStep++;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    drawStep = 0;
+                    break;
             }
 
         }
@@ -224,9 +245,9 @@ namespace ImageMeasuringWPF
                     ((Button)sp_object).IsEnabled = true;
                 }
             }
-            if (startDrawCommand)
+            if (drawStep > 0)
             {
-                startDrawCommand = false;
+                drawStep = 0;
                 canvas.Children.RemoveAt(canvas.Children.Count - 1);
             }
             m_DrawCommands = DrawCommands.None;
@@ -242,6 +263,7 @@ namespace ImageMeasuringWPF
 
         private void Button_DrawLine_Click(object sender, RoutedEventArgs e)
         {
+            drawStep = 0;
             if(m_DrawCommands != DrawCommands.Line)
             {
                 m_DrawCommands = DrawCommands.Line;
@@ -345,6 +367,7 @@ namespace ImageMeasuringWPF
 
         private void Button_DrawCircle_Click(object sender, RoutedEventArgs e)
         {
+            drawStep = 0;
             if (m_DrawCommands != DrawCommands.Circle)
             {
                 m_DrawCommands = DrawCommands.Circle;
@@ -368,9 +391,10 @@ namespace ImageMeasuringWPF
         }
         private void Button_DrawArc_Click(object sender, RoutedEventArgs e)
         {
+            drawStep = 0;
             if(m_DrawCommands != DrawCommands.Arc)
             {
-                m_DrawCommands= DrawCommands.Arc;
+                m_DrawCommands= DrawCommands.Line;
                 Button_DrawArc.IsEnabled = false;
             }
         }
