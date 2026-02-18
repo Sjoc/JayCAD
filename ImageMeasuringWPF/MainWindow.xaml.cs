@@ -202,17 +202,16 @@ namespace ImageMeasuringWPF
                             break;
                         case DrawCommands.Line:
                             DrawLine();
-                            drawStep++;
+                            drawStep=2;
                             break;
                         case DrawCommands.Circle:
                             DrawCircle();
-                            drawStep++;
+                            drawStep=2;
                             break;
                         case DrawCommands.Arc:
                             DrawArc();
                             break;
                     }
-                    drawStep++;
                     break;
                 case 1:
                     break;
